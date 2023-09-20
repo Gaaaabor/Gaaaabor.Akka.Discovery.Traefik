@@ -1,0 +1,58 @@
+version: '3.4'
+
+networks:
+  weather-bridge:
+    driver: bridge
+
+volumes:
+  cache:
+    driver: local
+
+services:
+
+  weather-traefik:
+    image: traefik:latest
+    container_name: weather-traefik
+    hostname: weather-traefik
+    command:
+      - --metrics.prometheus=true
+      - --metrics.prometheus.addEntryPointsLabels=true      
+      - --metrics.prometheus.addrouterslabels=true
+      - --metrics.prometheus.addServicesLabels=true
+      - --metrics.prometheus.entryPoint=metrics
+      - --entryPoints.metrics.address=:8082
+      - --entryPoints.http.address=:80
+      - --api.insecure=true
+      - --log.level=debug
+      - --accesslog
+      # Do not expose containers unless explicitly told so
+      - --providers.docker.exposedbydefault=false
+      # Tell Traefik to discover containers using the Docker API
+      - --providers.docker=true
+      # Enable the Trafik dashboard
+      - --api.dashboard=true   
+    ports:
+      - 80:80
+      - 443:443
+      - 127.0.0.1:9999:8080
+    volumes:
+      - ./config/traefik:/etc/traefik
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - weather-bridge
+
+  weather-example:
+    scale: 5
+    build:
+        context: .
+        dockerfile: examples/TraefikExample/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.weather-example.rule=Host(`localhost`)"
+      - "traefik.http.services.weather-example.loadbalancer.server.port=80"
+    depends_on:
+      - weather-traefik
+    networks:
+      - weather-bridge
