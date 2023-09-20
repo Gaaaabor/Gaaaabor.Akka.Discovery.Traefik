@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tester\**" />
+    <EmbeddedResource Remove="Tester\**" />
+    <None Remove="Tester\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Akka.Discovery" Version="1.5.13" />
+    <PackageReference Include="Akka.Hosting" Version="1.5.12.1" />
+  </ItemGroup>
+
+</Project>
