@@ -5,16 +5,17 @@ namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public class TraefikDiscovery : IExtension
     {
+        public readonly TraefikDiscoverySettings Settings;
+
         public static Config DefaultConfiguration()
         {
-            return ConfigurationFactory.FromResource<TraefikDiscovery>("Gaaaabor.Akka.Discovery.Traefik.reference.conf");
-
-            //return ConfigurationFactory.FromObject(new TraefikServiceDiscoveryOptions());
+            return ConfigurationFactory.FromObject(new TraefikServiceDiscoveryOptions());
         }
 
-        public static TraefikDiscovery Get(ActorSystem system) => system.WithExtension<TraefikDiscovery, TraefikDiscoveryProvider>();
-
-        public readonly TraefikDiscoverySettings Settings;
+        public static TraefikDiscovery Get(ActorSystem system)
+        {
+            return system.WithExtension<TraefikDiscovery, TraefikDiscoveryProvider>();
+        }
 
         public TraefikDiscovery(ExtendedActorSystem system)
         {

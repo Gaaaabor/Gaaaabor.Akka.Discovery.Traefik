@@ -36,9 +36,4 @@
     <PackageReference Include="Akka.Hosting" Version="1.5.12.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="reference.conf" />
-    <EmbeddedResource Include="reference.conf" />
-  </ItemGroup>
-
 </Project>

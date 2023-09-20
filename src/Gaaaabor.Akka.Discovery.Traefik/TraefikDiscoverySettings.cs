@@ -11,7 +11,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             ImmutableList<int>.Empty,
             null);
 
-        public static TraefikDiscoverySettings Create(ActorSystem system) => Create(system.Settings.Config.GetConfig("gaaaabor.akka.discovery.traefik"));
+        public static TraefikDiscoverySettings Create(ActorSystem system) => Create(system.Settings.Config.GetConfig("akka.discovery.traefik"));
 
         public static TraefikDiscoverySettings Create(Config? config)
         {

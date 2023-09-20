@@ -6,7 +6,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public class TraefikServiceDiscoveryOptions : IHoconOption
     {
-        private const string FullPath = "gaaaabor.akka.discovery.traefik";
+        private const string FullPath = "akka.discovery.traefik";
 
         public string ConfigPath { get; } = "traefik";
 
