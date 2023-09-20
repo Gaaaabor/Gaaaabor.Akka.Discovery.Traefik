@@ -77,27 +77,19 @@ namespace Gaaaabor.Akka.Discovery.Traefik
                     ? ApplyFilters(services, _traefikDiscoverySettings.Filters)
                     : services;
 
-                foreach (var service in filteredServices)
+                var addressesWithPort = filteredServices
+                    .SelectMany(service => service.ServerStatus)
+                    .Where(serverStatus => string.Equals(serverStatus.Value, "UP", StringComparison.OrdinalIgnoreCase))
+                    .Select(serverStatus => new Uri(serverStatus.Key))
+                    .ToList();
+
+                foreach (var addressWithPort in addressesWithPort)
                 {
-                    var addressesWithPort = service.ServerStatus
-                        .Where(x => string.Equals(x.Value, "up", StringComparison.OrdinalIgnoreCase))
-                        .Select(x => x.Key);
+                    _logger.Info("[TraefikServiceDiscovery] Found address: {0}", addressWithPort);
 
-                    if (addressesWithPort is null)
+                    if (IPAddress.TryParse(addressWithPort.Host, out var address) && !addresses.Contains(address))
                     {
-                        continue;
-                    }
-
-                    foreach (var addressWithPort in addressesWithPort)
-                    {
-                        var uri = new Uri(addressWithPort);
-
-                        _logger.Info("[TraefikServiceDiscovery] Found address {0}", uri);
-
-                        if (IPAddress.TryParse(uri.Host, out var address) && !addresses.Contains(address))
-                        {
-                            addresses.Add(address);
-                        }
+                        addresses.Add(address);
                     }
                 }
             }
@@ -113,12 +105,9 @@ namespace Gaaaabor.Akka.Discovery.Traefik
         {
             foreach (var service in services)
             {
-                foreach (var filter in filters)
+                if (filters.All(filter => _filterCache.TryGetValue(filter.Name, out var filterFunc) && filterFunc(filter.Values, service)))
                 {
-                    if (_filterCache.TryGetValue(filter.Name, out var filterFunc) && filterFunc(filter.Values, service))
-                    {
-                        yield return service;
-                    }
+                    yield return service;
                 }
             }
 
