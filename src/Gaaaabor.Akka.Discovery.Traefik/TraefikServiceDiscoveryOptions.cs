@@ -2,7 +2,7 @@
 using Akka.Hosting;
 using System.Text;
 
-namespace Akka.Discovery.Traefik
+namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public class TraefikServiceDiscoveryOptions : IHoconOption
     {

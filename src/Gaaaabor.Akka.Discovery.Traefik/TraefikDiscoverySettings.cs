@@ -1,7 +1,8 @@
 ﻿using Akka.Actor;
+using Akka.Configuration;
 using System.Collections.Immutable;
 
-namespace Akka.Discovery.Traefik
+namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public class TraefikDiscoverySettings
     {
@@ -12,7 +13,7 @@ namespace Akka.Discovery.Traefik
 
         public static TraefikDiscoverySettings Create(ActorSystem system) => Create(system.Settings.Config.GetConfig("akka.discovery.traefik-tag-based"));
 
-        public static TraefikDiscoverySettings Create(Configuration.Config? config)
+        public static TraefikDiscoverySettings Create(Config? config)
         {
             return new TraefikDiscoverySettings(
                 TraefikServiceDiscovery.ParseFiltersString(config?.GetString("filters")),

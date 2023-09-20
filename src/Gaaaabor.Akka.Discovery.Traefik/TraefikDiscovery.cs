@@ -1,11 +1,11 @@
 ﻿using Akka.Actor;
 using Akka.Configuration;
 
-namespace Akka.Discovery.Traefik
+namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public class TraefikDiscovery : IExtension
     {
-        public static Configuration.Config DefaultConfiguration()
+        public static Config DefaultConfiguration()
         {
             return ConfigurationFactory.FromResource<TraefikDiscovery>("Akka.Discovery.Traefik.reference.conf");
 

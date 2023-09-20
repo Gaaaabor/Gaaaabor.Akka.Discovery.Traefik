@@ -1,6 +1,6 @@
 ﻿using Akka.Hosting;
 
-namespace Akka.Discovery.Traefik
+namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public static class AkkaHostingExtensions
     {

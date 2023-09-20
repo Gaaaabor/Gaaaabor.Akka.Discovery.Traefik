@@ -1,7 +1,7 @@
 ﻿using Akka.Actor.Setup;
 using System.Collections.Immutable;
 
-namespace Akka.Discovery.Traefik
+namespace Gaaaabor.Akka.Discovery.Traefik
 {
     internal class TraefikDiscoverySetup : Setup
     {

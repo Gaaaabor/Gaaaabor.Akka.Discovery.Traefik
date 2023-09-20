@@ -1,12 +1,13 @@
 ﻿using Akka.Actor;
 using Akka.Configuration;
+using Akka.Discovery;
 using Akka.Event;
 using System.Collections.Immutable;
 using System.Net;
 using System.Net.Http.Json;
-using static Akka.Discovery.Traefik.TraefikContracts;
+using static Gaaaabor.Akka.Discovery.Traefik.TraefikContracts;
 
-namespace Akka.Discovery.Traefik
+namespace Gaaaabor.Akka.Discovery.Traefik
 {
     public sealed class TraefikServiceDiscovery : ServiceDiscovery
     {
