@@ -16,7 +16,7 @@ jobs:
 
     env:
       BUILD_CONFIG: 'Release'
-      SOLUTION: 'Akka.Discovery.Traefik.sln'
+      SOLUTION: 'Gaaaabor.Akka.Discovery.Traefik.sln'
 
     runs-on: ubuntu-latest
 
