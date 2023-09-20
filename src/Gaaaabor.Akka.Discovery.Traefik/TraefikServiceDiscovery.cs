@@ -79,19 +79,25 @@ namespace Gaaaabor.Akka.Discovery.Traefik
 
                 foreach (var service in filteredServices)
                 {
-                    var IpAddressWithPort = service.ServerStatus.FirstOrDefault(x => string.Equals(x.Value, "up", StringComparison.OrdinalIgnoreCase)).Key;
-                    if (IpAddressWithPort is null)
+                    var addressesWithPort = service.ServerStatus
+                        .Where(x => string.Equals(x.Value, "up", StringComparison.OrdinalIgnoreCase))
+                        .Select(x => x.Key);
+
+                    if (addressesWithPort is null)
                     {
                         continue;
                     }
 
-                    var uri = new Uri(IpAddressWithPort);
-
-                    _logger.Info("[TraefikServiceDiscovery] Found address {0}", uri);
-
-                    if (IPAddress.TryParse(uri.Host, out var address) && !addresses.Contains(address))
+                    foreach (var addressWithPort in addressesWithPort)
                     {
-                        addresses.Add(address);
+                        var uri = new Uri(addressWithPort);
+
+                        _logger.Info("[TraefikServiceDiscovery] Found address {0}", uri);
+
+                        if (IPAddress.TryParse(uri.Host, out var address) && !addresses.Contains(address))
+                        {
+                            addresses.Add(address);
+                        }
                     }
                 }
             }
