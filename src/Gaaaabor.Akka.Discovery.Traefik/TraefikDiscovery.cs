@@ -7,7 +7,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
     {
         public static Config DefaultConfiguration()
         {
-            return ConfigurationFactory.FromResource<TraefikDiscovery>("Akka.Discovery.Traefik.reference.conf");
+            return ConfigurationFactory.FromResource<TraefikDiscovery>("Gaaaabor.Akka.Discovery.Traefik.reference.conf");
 
             //return ConfigurationFactory.FromObject(new TraefikServiceDiscoveryOptions());
         }

@@ -5,7 +5,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
     public static class AkkaHostingExtensions
     {
         /// <summary>
-        ///     Adds Akka.Discovery.Traefik support to the <see cref="ActorSystem"/>.
+        ///     Adds Gaaaabor.Akka.Discovery.Traefik support to the <see cref="ActorSystem"/>.
         ///     Note that this only adds the discovery plugin, you will still need to add ClusterBootstrap for
         ///     a complete solution.
         /// </summary>
@@ -32,7 +32,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
         public static AkkaConfigurationBuilder WithTraefikDiscovery(this AkkaConfigurationBuilder builder) => builder.WithTraefikDiscovery(new TraefikServiceDiscoveryOptions());
 
         /// <summary>
-        ///     Adds Akka.Discovery.Traefik support to the <see cref="ActorSystem"/>.
+        ///     Adds Gaaaabor.Akka.Discovery.Traefik support to the <see cref="ActorSystem"/>.
         ///     Note that this only adds the discovery plugin, you will still need to add ClusterBootstrap for
         ///     a complete solution.
         /// </summary>
@@ -41,7 +41,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
         /// </param>
         /// <param name="configure">
         ///     An action that modifies an <see cref="TraefikDiscoverySetup"/> instance, used
-        ///     to configure Akka.Discovery.Traefik.
+        ///     to configure Gaaaabor.Akka.Discovery.Traefik.
         /// </param>
         /// <returns>
         ///     The same <see cref="AkkaConfigurationBuilder"/> instance originally passed in.
@@ -71,7 +71,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
         }
 
         /// <summary>
-        ///     Adds Akka.Discovery.Traefik support to the <see cref="ActorSystem"/>.
+        ///     Adds Gaaaabor.Akka.Discovery.Traefik support to the <see cref="ActorSystem"/>.
         ///     Note that this only adds the discovery plugin, you will still need to add ClusterBootstrap for
         ///     a complete solution.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
         ///     The builder instance being configured.
         /// </param>
         /// <param name="options">
-        ///     The <see cref="TraefikDiscoverySetup"/> instance used to configure Akka.Discovery.Traefik.
+        ///     The <see cref="TraefikDiscoverySetup"/> instance used to configure Gaaaabor.Akka.Discovery.Traefik.
         /// </param>
         /// <returns>
         ///     The same <see cref="AkkaConfigurationBuilder"/> instance originally passed in.

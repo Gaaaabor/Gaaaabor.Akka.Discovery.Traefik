@@ -22,7 +22,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             _logger = Logging.GetLogger(system, typeof(TraefikServiceDiscovery));
             _system = system;
 
-            _traefikDiscoverySettings = TraefikDiscoverySettings.Create(system?.Settings?.Config?.GetConfig("akka.discovery.traefik"));
+            _traefikDiscoverySettings = TraefikDiscoverySettings.Create(system?.Settings?.Config?.GetConfig("gaaaabor.akka.discovery.traefik"));
         }
 
         public override async Task<Resolved> Lookup(Lookup lookup, TimeSpan resolveTimeout)
