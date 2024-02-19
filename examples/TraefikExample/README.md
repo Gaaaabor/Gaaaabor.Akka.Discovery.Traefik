@@ -2,6 +2,8 @@
 
 The docker-compose.yml contains a traefik service and the example project with 5 instance.
 
+Before running set the "GeneratePackageOnBuild" to "False" in Gaaaabor.Akka.Discovery.Traefik.csproj ("<GeneratePackageOnBuild>False</GeneratePackageOnBuild>" )
+
 The cluster starts with 5 node by default, the example can be started using the following UP command:
 docker compose -f PATH_TO_THE_REPO/Gaaaabor.Akka.Discovery.Traefik\docker-compose.yml up --force-recreate --build
 

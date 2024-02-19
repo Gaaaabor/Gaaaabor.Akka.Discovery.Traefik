@@ -36,7 +36,7 @@ services:
       - weather-bridge
 
   weather-example:
-    scale: 2
+    scale: 5
     build:
         context: .
         dockerfile: examples/TraefikExample/Dockerfile
