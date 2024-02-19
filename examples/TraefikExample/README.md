@@ -9,8 +9,8 @@ docker compose -f PATH_TO_THE_REPO/Gaaaabor.Akka.Discovery.Traefik\docker-compos
 docker compose -f PATH_TO_THE_REPO\Gaaaabor.Akka.Discovery.Traefik\docker-compose.yml down
 
 The example controller can be reached on the http://localhost/WeatherForecast endpoint.
-The Traefik dashboard can be reached on the http://localhost:9999/dashboard endpoint.
-The service discovery uses the http://localhost:9999/api/http/services endpoint to get the running services.
+The Traefik dashboard can be reached on the http://localhost:9999/endpoint. (User: admin, Pwd: password)
+The service discovery uses the http://weather-traefik:8080/api/http/services endpoint to get the running services using basic auth header.
 
 For more info on Traefik check the project's site here https://doc.traefik.io/traefik/
 For more info in Akka Cluster check the project's site here https://getakka.net/articles/clustering/cluster-overview.html

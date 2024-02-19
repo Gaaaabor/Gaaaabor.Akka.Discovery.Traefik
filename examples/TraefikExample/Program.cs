@@ -28,12 +28,19 @@ builder.Services.AddAkka("weather", builder =>
         .WithAkkaManagement(port: ManagementPort)
         .WithTraefikDiscovery(options =>
         {
+            options.Auth = new TraefikApiAuth 
+            {
+                User = "admin",
+                Password = "password"
+            };
+            
             options.Endpoint = TraefikEndpoint;
             options.Ports = new List<int> { ManagementPort };
             options.Filters = new List<Filter>
             {
                 new Filter("type", "loadbalancer"),
-                new Filter("provider", "docker")
+                new Filter("provider", "docker"),
+                new Filter("serverstatus", "up")
             };
         })
         .WithShardRegion<SimpleShardRegion>(nameof(SimpleShardRegion), SimpleShardRegion.ActorFactory, new SimpleMessageExtractor(), new ShardOptions

@@ -13,16 +13,16 @@ namespace Gaaaabor.Akka.Discovery.Traefik
     {
         private static readonly IDictionary<string, Func<List<string>, Service, bool>> _filterCache = BuildFilterCache();
 
-        private readonly ExtendedActorSystem? _system;
-        private readonly ILoggingAdapter? _logger;
+        private readonly ExtendedActorSystem _system;
+        private readonly ILoggingAdapter _logger;
         private readonly TraefikDiscoverySettings _traefikDiscoverySettings;
 
-        public TraefikServiceDiscovery(ExtendedActorSystem? system)
+        public TraefikServiceDiscovery(ExtendedActorSystem system)
         {
             _logger = Logging.GetLogger(system, typeof(TraefikServiceDiscovery));
             _system = system;
 
-            _traefikDiscoverySettings = TraefikDiscoverySettings.Create(system?.Settings?.Config?.GetConfig("akka.discovery.traefik"));
+            _traefikDiscoverySettings = TraefikDiscoverySettings.Create(system.Settings.Config.GetConfig("akka.discovery.traefik"));
         }
 
         public override async Task<Resolved> Lookup(Lookup lookup, TimeSpan resolveTimeout)
@@ -37,7 +37,6 @@ namespace Gaaaabor.Akka.Discovery.Traefik
 
             foreach (var address in addresses)
             {
-                // TODO: Implement!
                 foreach (var port in _traefikDiscoverySettings.Ports)
                 {
                     resolvedTargets.Add(new ResolvedTarget(host: address.ToString(), port: port, address: address));
@@ -63,7 +62,15 @@ namespace Gaaaabor.Akka.Discovery.Traefik
 
                 using var httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(endpoint);
+
+                if (_traefikDiscoverySettings.Auth != null)
+                {
+                    httpClient.DefaultRequestHeaders.Add(_traefikDiscoverySettings.Auth.HeaderName, $"basic {_traefikDiscoverySettings.Auth.GetUserAndPasswordBase64()}");
+                }
+
                 using var httpResponseMessage = await httpClient.GetAsync("/api/http/services");
+                httpResponseMessage.EnsureSuccessStatusCode();
+
                 var services = await httpResponseMessage.Content.ReadFromJsonAsync<List<Service>>();
 
                 _logger.Info("[TraefikServiceDiscovery] Found services: {0}", services?.Count ?? 0);
@@ -78,8 +85,8 @@ namespace Gaaaabor.Akka.Discovery.Traefik
                     : services;
 
                 var addressesWithPort = filteredServices
-                    .SelectMany(service => service.ServerStatus)
-                    .Where(serverStatus => string.Equals(serverStatus.Value, "UP", StringComparison.OrdinalIgnoreCase))
+                    .Where(service => service.ServerStatus != null)
+                    .SelectMany(service => service.ServerStatus)                    
                     .Select(serverStatus => new Uri(serverStatus.Key))
                     .ToList();
 
@@ -101,7 +108,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             return addresses;
         }
 
-        private IEnumerable<Service> ApplyFilters(List<Service> services, ImmutableList<Filter> filters)
+        private static IEnumerable<Service> ApplyFilters(List<Service> services, ImmutableList<Filter> filters)
         {
             foreach (var service in services)
             {
@@ -114,7 +121,7 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             yield break;
         }
 
-        internal static ImmutableList<Filter> ParseFiltersString(string? filtersString)
+        internal static ImmutableList<Filter> ParseFiltersString(string filtersString)
         {
             var filters = new List<Filter>();
 
@@ -160,24 +167,6 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             };
 
             return dict;
-        }
-    }
-
-    public class Filter
-    {
-        public string Name { get; }
-        public List<string> Values { get; } = new List<string>();
-
-        public Filter(string name, List<string> values)
-        {
-            Name = name;
-            Values = values;
-        }
-
-        public Filter(string name, string value)
-        {
-            Name = name;
-            Values.Add(value);
         }
     }
 }
