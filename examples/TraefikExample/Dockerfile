@@ -9,6 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 COPY ["examples/TraefikExample/TraefikExample.csproj", "examples/TraefikExample/"]
+COPY ["src/Gaaaabor.Akka.Discovery.Traefik/Gaaaabor.Akka.Discovery.Traefik.csproj", "src/Gaaaabor.Akka.Discovery.Traefik/"]
 
 WORKDIR /src
 

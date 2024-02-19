@@ -6,21 +6,25 @@ namespace Gaaaabor.Akka.Discovery.Traefik
     internal class TraefikDiscoverySetup : Setup
     {
         /// <summary>
-        ///     Additional filtering rules to be applied to the possible Traefik contact points
+        /// Additional filtering rules to be applied to the possible Traefik contact points
         /// </summary>
-        public List<Filter> Filters { get; set; }
+        public List<Filter>? Filters { get; set; }
 
         /// <summary>
-        ///     List of ports to be considered as Akka.Management ports on each instance.
-        ///     Use this if you have multiple Akka.NET nodes per Traefik instance
+        /// List of ports to be considered as Akka.Management ports on each instance.
+        /// Use this if you have multiple Akka.NET nodes per Traefik instance
         /// </summary>
-        public List<int> Ports { get; set; }
+        public List<int>? Ports { get; set; }
+
+        /// <summary>        
+        /// Client may use specified endpoint.
+        /// </summary>
+        public string? Endpoint { get; set; }
 
         /// <summary>
-        /// <para>
-        ///     Client may use specified endpoint.
+        /// Client may use Basic Auth with User:Password base64 in Authorization header
         /// </summary>
-        public string Endpoint { get; set; }
+        public TraefikApiAuth? Auth { get; set; }
 
         internal TraefikDiscoverySettings Apply(TraefikDiscoverySettings settings)
         {
@@ -37,6 +41,11 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             if (Endpoint != null)
             {
                 settings = settings.WithEndpoint(Endpoint);
+            }
+
+            if (Auth != null)
+            {
+                settings = settings.WithAuth(Auth);
             }
 
             return settings;

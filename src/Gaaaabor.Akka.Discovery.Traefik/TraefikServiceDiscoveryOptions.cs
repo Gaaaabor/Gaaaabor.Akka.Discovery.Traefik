@@ -13,22 +13,31 @@ namespace Gaaaabor.Akka.Discovery.Traefik
         public Type Class { get; } = typeof(TraefikServiceDiscovery);
 
         /// <summary>
-        ///     Additional filtering rules to be applied to the possible Traefik contact points
+        /// Additional filtering rules to be applied to the possible Traefik contact points
         /// </summary>
-        public List<Filter>? Filters { get; set; } = new();
+        public List<Filter> Filters { get; set; } = new();
 
         /// <summary>
-        ///     List of ports to be considered as Akka.Management ports on each instance.
+        /// List of ports to be considered as Akka.Management ports on each instance.
         /// </summary>
-        public List<int>? Ports { get; set; } = new();
+        public List<int> Ports { get; set; } = new();
+
+        /// <summary>        
+        /// Client may use specified endpoint.
+        /// </summary>
+        public string? Endpoint { get; set; }
 
         /// <summary>
-        /// <para>
-        ///     Client may use specified endpoint.
+        /// Traefik API authentication
         /// </summary>
-        public string Endpoint { get; set; }
+        public TraefikApiAuth? Auth { get; set; }
 
-        public void Apply(AkkaConfigurationBuilder builder, Setup setup = null)
+        /// <summary>
+        /// Builds the HOCON config
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="setup"></param>
+        public void Apply(AkkaConfigurationBuilder builder, Setup? setup = null)
         {
             var sb = new StringBuilder();
             sb.AppendLine($"{FullPath} {{");
@@ -51,6 +60,11 @@ namespace Gaaaabor.Akka.Discovery.Traefik
             if (Endpoint is { })
             {
                 sb.AppendLine($"endpoint = {Endpoint.ToHocon()}");
+            }
+
+            if (Auth is { })
+            {
+                sb.AppendLine($"auth = {Auth.ToString().ToHocon()}");
             }
 
             sb.AppendLine("}");

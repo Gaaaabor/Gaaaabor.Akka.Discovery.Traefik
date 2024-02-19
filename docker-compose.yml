@@ -11,26 +11,20 @@ volumes:
 services:
 
   weather-traefik:
-    image: traefik:latest
+    image: traefik:v2.10.1
     container_name: weather-traefik
     hostname: weather-traefik
     command:
-      - --metrics.prometheus=true
-      - --metrics.prometheus.addEntryPointsLabels=true      
-      - --metrics.prometheus.addrouterslabels=true
-      - --metrics.prometheus.addServicesLabels=true
-      - --metrics.prometheus.entryPoint=metrics
-      - --entryPoints.metrics.address=:8082
-      - --entryPoints.http.address=:80
-      - --api.insecure=true
-      - --log.level=debug
-      - --accesslog
-      # Do not expose containers unless explicitly told so
+      - --api
       - --providers.docker.exposedbydefault=false
-      # Tell Traefik to discover containers using the Docker API
-      - --providers.docker=true
-      # Enable the Trafik dashboard
-      - --api.dashboard=true   
+      - --entrypoints.web2.address=:8080
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik.rule: Host(`weather-traefik`) || Host(`localhost`)
+      traefik.http.routers.traefik.entrypoints: web2
+      traefik.http.routers.traefik.service: api@internal
+      traefik.http.routers.traefik.middlewares: auth
+      traefik.http.middlewares.auth.basicauth.users: admin:$$apr1$$vO3/IDvg$$JrbhU9NSQub83/mQu9/fP1
     ports:
       - 80:80
       - 443:443
