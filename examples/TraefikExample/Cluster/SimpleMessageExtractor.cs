@@ -45,5 +45,12 @@ namespace TraefikExample.Cluster
 
             return message;
         }
+
+        public string ShardId(string entityId, object? messageHint = null)
+        {
+            return messageHint is null
+                ? _shardCache[Math.Abs(MurmurHash.StringHash(entityId)) % _maxNumberOfShards]
+                : ShardId(messageHint);
+        }
     }
 }
